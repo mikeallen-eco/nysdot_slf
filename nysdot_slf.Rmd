@@ -1,0 +1,43 @@
+# load libraries and data
+```{r}
+library(dplyr)
+library(ggplot2)
+library(sf)
+
+# read in road data
+r <- read_sf("data/shapefiles/tl_2019_us_primaryroads.shp")
+
+# read in county data
+c <- read_sf("data/shapefiles/cb_2018_us_county_20m.shp")
+c <- c[c$STATEFP %in% c("34","36", "42", "09"),] 
+# https://www.mercercountypa.gov/dps/state_fips_code_listing.htm
+
+state_bounds <- 
+  rnaturalearth::ne_states(returnclass = "sf")  %>%
+  st_transform(crs = st_crs(c)) %>%
+  st_crop((raster::extent(c) + c(-5,-5,5,5)))
+```
+
+# make a map
+```{r}
+state_bounds <- 
+  rnaturalearth::ne_states(returnclass = "sf", 
+                           country = "United States of America")  %>%
+  st_transform(crs = st_crs(c)) %>%
+  st_filter(region = "Northeast")
+
+ggplot() +
+  geom_sf(aes(), data = c, fill = "gray") +
+    geom_sf(aes(), fill = "blue", data = state_bounds) +
+  geom_sf(aes(), data = c, fill = "gray") 
+
+
+```
+
+
+# data sources
+roads:
+https://catalog.data.gov/dataset/tiger-line-shapefile-2019-nation-u-s-primary-roads-national-shapefile
+
+counties:
+https://www.census.gov/geographies/mapping-files/time-series/geo/carto-boundary-file.html
