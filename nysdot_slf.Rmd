@@ -5,10 +5,10 @@ library(ggplot2)
 library(sf)
 
 # read in road data
-r <- read_sf("data/shapefiles/tl_2019_us_primaryroads.shp")
+# r <- read_sf("private_data/tl_2019_us_primaryroads.shp")
 
 # read in county data
-c <- read_sf("data/shapefiles/cb_2018_us_county_20m.shp")
+c <- read_sf("public_data/cb_2018_us_county_20m.shp")
 c <- c[c$STATEFP %in% c("34","36", "42", "09"),] 
 # https://www.mercercountypa.gov/dps/state_fips_code_listing.htm
 
